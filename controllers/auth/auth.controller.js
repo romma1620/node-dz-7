@@ -1,7 +1,7 @@
-const {authEnum, responceStatusCodesEnum} = require('../../constants')
+const {authEnum, emailActionEnum, responceStatusCodesEnum} = require('../../constants')
 const {error, ErrorHandler} = require('../../errors');
 const {tokenGenerator, checkHashPassword} = require('../../helpers');
-const {authService, userService} = require('../../service');
+const {authService, emailService, userService} = require('../../service');
 
 
 module.exports = {
@@ -61,7 +61,7 @@ module.exports = {
 
             const tokens = tokenGenerator();
 
-
+            await emailService.sendMail(user.email, emailActionEnum.USER_REFRESH, {userName: user.name});
             await authService.deleteByParams({refresh_token});
             await authService.createTokenPair({...tokens, userId: req.userId})
 
