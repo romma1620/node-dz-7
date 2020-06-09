@@ -1,12 +1,18 @@
+const dotenv = require('dotenv');
 const express = require('express');
+const morgan = require('morgan');
 
+dotenv.config();
+const {PORT} = require('./config')
 const db = require('./dataBase').getInstance()
 db.setModels();
 
 const app = express();
 
+
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(morgan('dev'));
 
 const {authRouter ,userRouter} = require('./routes');
 
@@ -29,11 +35,11 @@ app.use('*', (err, req, res, next) => {
         })
 })
 
-app.listen(1616, (err) => {
+app.listen(PORT, (err) => {
     if (err) {
         console.log(err);
     } else {
-        console.log('Listen 1616...');
+        console.log(`Listen ${PORT}...`);
     }
 })
 
